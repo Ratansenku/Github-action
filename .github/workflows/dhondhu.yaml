@@ -19,6 +19,7 @@ jobs:
           client-id: eadce9c1-0c71-4eca-9755-b025822710ca
           tenant-id: a1e9944a-819b-4098-adbd-306b8b135f25
           subscription-id: d861e526-3d62-49a8-8a36-c9c24ccf1160
+          client secrets: 2_b8Q~fSeyai9_KJVgNi9yQx7kz.mrM.bWRk7alh
             
       - name: Terraform fmt
         id: fmt
