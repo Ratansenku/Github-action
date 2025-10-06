@@ -1,71 +1,153 @@
-name: "Infra Pipeline Kuch Bhi"
+# name: "Infra Pipeline Kuch Bhi"
 
-on: workflow_dispatch
+# on: workflow_dispatch
+
+# permissions:
+#   id-token: write
+#   contents: read
+  
+# jobs: 
+#   terraform-init-plan:
+#     runs-on: ubuntu-latest
+#     steps: 
+#       - name: Checkout
+#         uses: actions/checkout@v5.0.0
+    
+#       - name: Azure Login
+#         uses: Azure/login@v2.3.0
+#         with:
+#           client-id: eadce9c1-0c71-4eca-9755-b025822710ca
+#           tenant-id: a1e9944a-819b-4098-adbd-306b8b135f25
+#           subscription-id: d861e526-3d62-49a8-8a36-c9c24ccf1160
+#           client secrets: 2_b8Q~fSeyai9_KJVgNi9yQx7kz.mrM.bWRk7alh
+            
+#       - name: Terraform fmt
+#         id: fmt
+#         run: terraform fmt -check
+#         continue-on-error: true
+#         working-directory: environments/dev
+        
+#       - name: Terraform Init
+#         id: init
+#         run: terraform init -input=false  
+#         working-directory: environments/dev
+
+#       - name: Terraform Validate
+#         id: validate
+#         run: terraform validate -no-color
+#         working-directory: environments/dev        
+      
+#       - name: Terraform Plan
+#         id: plan
+#         run: terraform plan -no-color -input=false
+#         continue-on-error: true
+#         working-directory: environments/dev    
+        
+#   terraform-apply:    
+#     runs-on: self-hosted
+#     needs: terraform-init-plan
+#     environment: dev
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v5.0.0
+    
+#       - name: Azure Login
+#         uses: Azure/login@v2.3.0
+#         with:
+#           client-id: ff27bcf6-f60c-4a57-8b01-8eee5de2a9cd
+#           tenant-id: 0f7010fd-209e-4344-8457-043ffb37143b
+#           subscription-id: 1075ec7a-b17a-4f37-bf3f-9d68c4506dc1   
+          
+#       - name: Terraform Init
+#         id: init
+#         run: terraform init -input=false  
+#         working-directory: environments/dev
+
+#       - name: Terraform Apply
+#         id: apply
+#         run: terraform apply --auto-approve
+#         continue-on-error: true
+#         working-directory: environments/dev              
+          
+name: Infra Pipeline Kuch Bhi
+
+on: 
+  workflow_dispatch:
 
 permissions:
   id-token: write
   contents: read
-  
+
 jobs: 
   terraform-init-plan:
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout
-        uses: actions/checkout@v5.0.0
-    
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.5
+
       - name: Azure Login
-        uses: Azure/login@v2.3.0
+        uses: azure/login@v2
         with:
           client-id: eadce9c1-0c71-4eca-9755-b025822710ca
           tenant-id: a1e9944a-819b-4098-adbd-306b8b135f25
           subscription-id: d861e526-3d62-49a8-8a36-c9c24ccf1160
           client secrets: 2_b8Q~fSeyai9_KJVgNi9yQx7kz.mrM.bWRk7alh
-            
+
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
         working-directory: environments/dev
-        
+
       - name: Terraform Init
         id: init
-        run: terraform init -input=false  
+        run: terraform init -input=false
         working-directory: environments/dev
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-        working-directory: environments/dev        
-      
+        working-directory: environments/dev
+
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color -input=false
         continue-on-error: true
-        working-directory: environments/dev    
-        
-  terraform-apply:    
+        working-directory: environments/dev
+
+  terraform-apply:
     runs-on: self-hosted
     needs: terraform-init-plan
     environment: dev
     steps:
       - name: Checkout
-        uses: actions/checkout@v5.0.0
-    
-      - name: Azure Login
-        uses: Azure/login@v2.3.0
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
         with:
-          client-id: ff27bcf6-f60c-4a57-8b01-8eee5de2a9cd
-          tenant-id: 0f7010fd-209e-4344-8457-043ffb37143b
-          subscription-id: 1075ec7a-b17a-4f37-bf3f-9d68c4506dc1   
-          
+          terraform_version: 1.9.5
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: eadce9c1-0c71-4eca-9755-b025822710ca
+          tenant-id: a1e9944a-819b-4098-adbd-306b8b135f25
+          subscription-id: d861e526-3d62-49a8-8a36-c9c24ccf1160
+          client secrets: 2_b8Q~fSeyai9_KJVgNi9yQx7kz.mrM.bWRk7alh
+
       - name: Terraform Init
         id: init
-        run: terraform init -input=false  
+        run: terraform init -input=false
         working-directory: environments/dev
 
       - name: Terraform Apply
         id: apply
         run: terraform apply --auto-approve
         continue-on-error: true
-        working-directory: environments/dev              
-          
+        working-directory: environments/dev
